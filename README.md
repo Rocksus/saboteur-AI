@@ -2,7 +2,13 @@
 
 Final project for Game Theory/AI course. This repo is dedicated completely for the development of the AI. The base game can be found [Here](https://github.com/nickylogan/saboteur). The AI will approach the game with an unsupervised reinforcement learning approach, competing against itself using a shared curriculum.
 
-## Usage
+## Model
+* ### Inputs
+```will be added```
+* ### Outputs
+```will be added```
+* ### Reward System
+```will be added```
 
 ## Controls
 
