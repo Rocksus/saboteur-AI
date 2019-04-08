@@ -1,0 +1,5 @@
+.main {
+    -fx-background-image: url('../img/background.png');
+    -fx-background-repeat: repeat;
+    -fx-background-size: 250%;
+}
