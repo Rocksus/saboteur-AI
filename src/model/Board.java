@@ -47,8 +47,6 @@ public class Board {
   /** The bottom goal card */
   private InternalGoalType bottomGoal;
   private boolean bottomRotated;
-  /** Marks the top goal as opened */
-  private boolean topGoalOpened;
 
   /**
    * Creates a {@link Board} object.
@@ -153,8 +151,8 @@ public class Board {
     }
     // Make sure not equal to any of the goal cards
     if (target.equals(topGoalPosition())
-        || target.equals(middleGoalPosition())
-        || target.equals(bottomGoalPosition())) {
+            || target.equals(middleGoalPosition())
+            || target.equals(bottomGoalPosition())) {
       throw new GameException("Cannot remove any of the goal cards");
     }
     // Check if contains card
@@ -194,8 +192,8 @@ public class Board {
    */
   public final boolean isGoldReached() {
     return (isReachable(topGoalPosition()) && topGoal.actualType == GoalType.GOLD)
-           || (isReachable(middleGoalPosition()) && middleGoal.actualType == GoalType.GOLD)
-           || (isReachable(bottomGoalPosition()) && bottomGoal.actualType == GoalType.GOLD);
+            || (isReachable(middleGoalPosition()) && middleGoal.actualType == GoalType.GOLD)
+            || (isReachable(bottomGoalPosition()) && bottomGoal.actualType == GoalType.GOLD);
   }
 
   /**
@@ -246,10 +244,10 @@ public class Board {
    */
   public final boolean isDestroyable(Position target) {
     return !target.equals(startPosition())
-           && !target.equals(topGoalPosition())
-           && !target.equals(middleGoalPosition())
-           && !target.equals(bottomGoalPosition())
-           && cellAt(target).hasCard();
+            && !target.equals(topGoalPosition())
+            && !target.equals(middleGoalPosition())
+            && !target.equals(bottomGoalPosition())
+            && cellAt(target).hasCard();
   }
 
   /**
@@ -343,14 +341,14 @@ public class Board {
   public final Set<Position> getPlaceable(PathCard card) {
     Set<Position> reachable = getReachable();
     return getReachable().stream()
-      .filter(p ->
-        !(p.equals(startPosition())
-          || p.equals(topGoalPosition())
-          || p.equals(middleGoalPosition())
-          || p.equals(bottomGoalPosition())
-          || cellAt(p).hasCard())
-        && checkTouchingSides(card, p))
-      .collect(Collectors.toSet());
+            .filter(p ->
+                    !(p.equals(startPosition())
+                            || p.equals(topGoalPosition())
+                            || p.equals(middleGoalPosition())
+                            || p.equals(bottomGoalPosition())
+                            || cellAt(p).hasCard())
+                            && checkTouchingSides(card, p))
+            .collect(Collectors.toSet());
   }
 
   /**
@@ -384,37 +382,37 @@ public class Board {
     if (!isInBoard(target)) return false;
     // Check touching sides
     if (
-      isInBoard(target.top())
-      && cellAt(target.top()).bottomSide() != Cell.Side.EMPTY
-      && cellAt(target.top()).bottomSide().val() != card.topSide().val()
-      && cellAt(target.top()).bottomSide().val() + card.topSide().val() < 0
+            isInBoard(target.top())
+                    && cellAt(target.top()).bottomSide() != Cell.Side.EMPTY
+                    && cellAt(target.top()).bottomSide().val() != card.topSide().val()
+                    && cellAt(target.top()).bottomSide().val() + card.topSide().val() < 0
     ) {
       // System.out.printf("cell(bottom: %s) vs card(top: %s)\n", cellAt(target.top()).bottomSide(), card.topSide());
       return false;
     }
     if (
-      isInBoard(target.right())
-      && cellAt(target.right()).leftSide() != Cell.Side.EMPTY
-      && cellAt(target.right()).leftSide().val() != card.rightSide().val()
-      && cellAt(target.right()).leftSide().val() + card.rightSide().val() < 0
+            isInBoard(target.right())
+                    && cellAt(target.right()).leftSide() != Cell.Side.EMPTY
+                    && cellAt(target.right()).leftSide().val() != card.rightSide().val()
+                    && cellAt(target.right()).leftSide().val() + card.rightSide().val() < 0
     ) {
       // System.out.printf("cell(left: %s) vs card(right: %s)\n", cellAt(target.right()).leftSide(), card.rightSide());
       return false;
     }
     if (
-      isInBoard(target.bottom())
-      && cellAt(target.bottom()).topSide() != Cell.Side.EMPTY
-      && cellAt(target.bottom()).topSide().val() != card.bottomSide().val()
-      && cellAt(target.bottom()).topSide().val() + card.bottomSide().val() < 0
+            isInBoard(target.bottom())
+                    && cellAt(target.bottom()).topSide() != Cell.Side.EMPTY
+                    && cellAt(target.bottom()).topSide().val() != card.bottomSide().val()
+                    && cellAt(target.bottom()).topSide().val() + card.bottomSide().val() < 0
     ) {
       // System.out.printf("cell(top: %s) vs card(bottom: %s)\n", cellAt(target.bottom()).topSide(), card.bottomSide());
       return false;
     }
     if (
-      isInBoard(target.left())
-      && cellAt(target.left()).rightSide() != Cell.Side.EMPTY
-      && cellAt(target.left()).rightSide().val() != card.leftSide().val()
-      && cellAt(target.left()).rightSide().val() + card.leftSide().val() < 0
+            isInBoard(target.left())
+                    && cellAt(target.left()).rightSide() != Cell.Side.EMPTY
+                    && cellAt(target.left()).rightSide().val() != card.leftSide().val()
+                    && cellAt(target.left()).rightSide().val() + card.leftSide().val() < 0
     ) {
       // System.out.printf("cell(right: %s) vs card(left: %s)\n", cellAt(target.left()).rightSide(), card.leftSide());
       return false;
@@ -585,5 +583,61 @@ public class Board {
       this.cells[p.x][p.y].placePathCard(right);
     }
     return type.actualType;
+  }
+
+  /**
+   * Simulates placing a card on the board at the specified position
+   *
+   * @param card the path card to be placed
+   * @param x    the x position
+   * @param y    the y position
+   * @return a simulated board result if valid, otherwise null is returned
+   */
+  public final Board simulatePlaceCardAt(PathCard card, int x, int y) {
+    Board board = this.copy();
+    try {
+      board.placePathCardAt(card, x, y);
+    } catch (GameException e) {
+      return null;
+    }
+    return board;
+  }
+
+  /**
+   * Simulates removing a card on the board at the specified position
+   *
+   * @param x the x position
+   * @param y the y position
+   * @return a simulated board result if valid, otherwise null is returned
+   */
+  public final Board simulateRemoveCardAt(int x, int y) {
+    Board board = this.copy();
+    try {
+      board.removeCardAt(x, y);
+    } catch (GameException e) {
+      return null;
+    }
+    return board;
+  }
+
+  /**
+   * Copies a board state
+   *
+   * @return board
+   */
+  public final Board copy() {
+    Board board = new Board();
+    board.topGoal = this.topGoal;
+    board.middleGoal = this.middleGoal;
+    board.bottomGoal = this.bottomGoal;
+    board.topRotated = this.topRotated;
+    board.middleRotated = this.middleRotated;
+    board.bottomRotated = this.bottomRotated;
+    for (int x = 0; x < board.width; ++x) {
+      for (int y = 0; y < board.height; ++y) {
+        board.cells[x][y] = this.cells[x][y].copy();
+      }
+    }
+    return board;
   }
 }

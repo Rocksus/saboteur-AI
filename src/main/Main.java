@@ -15,6 +15,11 @@ public class Main extends Application {
 
   @Override
   public void start(Stage primaryStage) throws Exception {
+//    GUIGamePlayer testAI1 = new GUIGamePlayer("Smart");
+//    GUIGamePlayer testAI2 = new GUIGamePlayer("Smart");
+//    GUIGamePlayer testAI3 = new GUIGamePlayer("Smart");
+//    GUIGamePlayer testAI4 = new GUIGamePlayer("Smart");
+//    GUIGamePlayer testAI5 = new GUIGamePlayer("Smart");
     HeuristicsAI testAI1 = new HeuristicsAI("Stupidity");
     HeuristicsAI testAI2 = new HeuristicsAI("Stupidity");
     HeuristicsAI testAI3 = new HeuristicsAI("Stupidity");
